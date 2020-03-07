@@ -1,6 +1,12 @@
 import * as ts from 'typescript';
-import { Range } from 'vscode-languageserver-types';
-import { getLastChild, buildDocumentation, getObjectLiteralExprFromExportExpr } from './componentInfo';
+import { Range } from 'vscode-languageserver';
+import {
+  getLastChild,
+  buildDocumentation,
+  getNodeFromExportNode,
+  getComponentDecoratorArgumentType,
+  isClassType
+} from './componentInfo';
 import { T_TypeScript } from '../../services/dependencyService';
 
 interface InternalChildComponent {
@@ -10,7 +16,7 @@ interface InternalChildComponent {
     path: string;
     range: Range;
   };
-  defaultExportExpr?: ts.Node;
+  defaultExportNode?: ts.Node;
 }
 
 export function getChildComponents(
@@ -19,7 +25,17 @@ export function getChildComponents(
   checker: ts.TypeChecker,
   tagCasing = 'kebab'
 ): InternalChildComponent[] | undefined {
-  const componentsSymbol = checker.getPropertyOfType(defaultExportType, 'components');
+  let type = defaultExportType;
+  if (isClassType(tsModule, type)) {
+    // get decorator argument type when class
+    const classDecoratorArgumentType = getComponentDecoratorArgumentType(tsModule, defaultExportType, checker);
+    if (!classDecoratorArgumentType) {
+      return undefined;
+    }
+    type = classDecoratorArgumentType;
+  }
+
+  const componentsSymbol = checker.getPropertyOfType(type, 'components');
   if (!componentsSymbol || !componentsSymbol.valueDeclaration) {
     return undefined;
   }
@@ -56,15 +72,31 @@ export function getChildComponents(
       }
 
       if (objectLiteralSymbol.flags & tsModule.SymbolFlags.Alias) {
-        const definitionObjectLiteralSymbol = checker.getAliasedSymbol(objectLiteralSymbol);
-        if (definitionObjectLiteralSymbol.valueDeclaration) {
-          const defaultExportExpr = getLastChild(definitionObjectLiteralSymbol.valueDeclaration);
+        const definitionSymbol = checker.getAliasedSymbol(objectLiteralSymbol);
+        const decalration = definitionSymbol.valueDeclaration;
+        if (tsModule.isClassDeclaration(definitionSymbol.valueDeclaration)) {
+          const defaultExportNode = definitionSymbol.valueDeclaration;
+          const sourceFile = defaultExportNode.getSourceFile();
+          const definitionRange = Range.create(
+            tsModule.getLineAndCharacterOfPosition(sourceFile, decalration.getStart()),
+            tsModule.getLineAndCharacterOfPosition(sourceFile, decalration.getEnd())
+          );
+          result.push({
+            name: componentName,
+            documentation: buildDocumentation(tsModule, definitionSymbol, checker),
+            definition: {
+              path: definitionSymbol.valueDeclaration.getSourceFile().fileName,
+              range: definitionRange
+            },
+            defaultExportNode: getNodeFromExportNode(tsModule, defaultExportNode)
+          });
+        } else if (definitionSymbol.valueDeclaration) {
+          const defaultExportExpr = getLastChild(definitionSymbol.valueDeclaration);
           if (!defaultExportExpr) {
             return;
           }
 
           const sourceFile = defaultExportExpr.getSourceFile();
-          const decalration = definitionObjectLiteralSymbol.valueDeclaration;
           // the range of the definition, not of the defaultExportExpr,
           // for the later one's start may be incorrect
           const definitionRange = Range.create(
@@ -73,12 +105,12 @@ export function getChildComponents(
           );
           result.push({
             name: componentName,
-            documentation: buildDocumentation(tsModule, definitionObjectLiteralSymbol, checker),
+            documentation: buildDocumentation(tsModule, definitionSymbol, checker),
             definition: {
-              path: definitionObjectLiteralSymbol.valueDeclaration.getSourceFile().fileName,
+              path: definitionSymbol.valueDeclaration.getSourceFile().fileName,
               range: definitionRange
             },
-            defaultExportExpr: getObjectLiteralExprFromExportExpr(tsModule, defaultExportExpr)
+            defaultExportNode: getNodeFromExportNode(tsModule, defaultExportExpr)
           });
         }
       }
