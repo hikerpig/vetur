@@ -2,10 +2,10 @@
   "name": "vetur",
   "displayName": "Vetur",
   "description": "Vue tooling for VS Code",
-  "author": "Pine Wu <octref@gmail.com>",
+  "author": "hikerpig <hikerpigwinnie@gmail.com>",
   "icon": "asset/vue.png",
-  "version": "0.24.0",
-  "publisher": "octref",
+  "version": "0.24.1",
+  "publisher": "hikerpig",
   "scripts": {
     "build:grammar": "tsc -p . && node dist/scripts/build_grammar",
     "compile": "run-s compile:source copy:snippets",
@@ -40,7 +40,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vuejs/vetur.git"
+    "url": "https://github.com/hikerpig/vetur.git"
   },
   "keywords": [
     "vetur",
@@ -52,7 +52,7 @@
     "Programming Languages"
   ],
   "engines": {
-    "vscode": "^1.42.0"
+    "vscode": "^1.45.1"
   },
   "dependencies": {
     "vscode-languageclient": "^6.1.3",
