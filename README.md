@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=octref.vetur">
-    <img src="https://vsmarketplacebadge.apphb.com/version-short/hhikerpig.vetur.svg?style=flat-square">
+  <a href="https://marketplace.visualstudio.com/items?itemName=hikerpig.vetur">
+    <img src="https://vsmarketplacebadge.apphb.com/version-short/hikerpig.vetur.svg?style=flat-square">
   </a>
 </p>
 
