@@ -1,4 +1,4 @@
-import { activateLS, showFile, sleep, FILE_LOAD_SLEEP_TIME } from '../../lsp/helper';
+import { activateLS, showFile } from '../../lsp/helper';
 import { position, getDocUri } from '../util';
 import { testCompletion, testNoSuchCompletion } from './helper';
 import { CompletionItem, CompletionItemKind, MarkdownString } from 'vscode';
@@ -10,26 +10,13 @@ describe('Should autocomplete interpolation for <template> in class component', 
   before('activate', async () => {
     await activateLS();
     await showFile(templateDocUri);
-    await sleep(FILE_LOAD_SLEEP_TIME);
-    await sleep(FILE_LOAD_SLEEP_TIME);
   });
 
   const defaultList: CompletionItem[] = [
     {
-      label: 'foo',
-      documentation: new MarkdownString('My foo').appendCodeblock(
-        `foo: {
-  type: Boolean,
-  default: false
-}`,
-        'js'
-      ),
-      kind: CompletionItemKind.Property
-    },
-    {
       label: 'msg',
       documentation: new MarkdownString('My msg').appendCodeblock(`msg = 'Vetur means "Winter" in icelandic.'`, 'js'),
-      kind: CompletionItemKind.Property
+      kind: CompletionItemKind.Field
     },
     {
       label: 'count',
@@ -39,7 +26,7 @@ describe('Should autocomplete interpolation for <template> in class component', 
 }`,
         'js'
       ),
-      kind: CompletionItemKind.Property
+      kind: CompletionItemKind.Field
     },
     {
       label: 'hello',
@@ -50,7 +37,7 @@ describe('Should autocomplete interpolation for <template> in class component', 
         'js'
       ),
 
-      kind: CompletionItemKind.Method
+      kind: CompletionItemKind.Function
     }
   ];
 
@@ -63,6 +50,7 @@ describe('Should autocomplete interpolation for <template> in class component', 
       await testCompletion(parentTemplateDocUri, position(4, 5), [
         {
           label: 'basic-class',
+          kind: CompletionItemKind.Property,
           documentationStart: 'My basic tag\n```js\n@Component('
         }
       ]);
@@ -72,6 +60,7 @@ describe('Should autocomplete interpolation for <template> in class component', 
       await testCompletion(parentTemplateDocUri, position(2, 18), [
         {
           label: 'foo',
+          kind: CompletionItemKind.Value,
           documentation: new MarkdownString('My foo').appendCodeblock(
             `foo: {
   type: Boolean,
