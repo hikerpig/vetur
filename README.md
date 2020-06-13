@@ -8,7 +8,7 @@
   </a>
 </p>
 
-**NOTE: This repo is a fork of the [offcial vuejs/vetur](https://github.com/vuejs/vetur), have merged some long pending PRs, see the difference in [this diff](https://github.com/vuejs/vetur/compare/master...hikerpig:master).**
+**NOTE: This repo is a fork of the [offcial vuejs/vetur](https://github.com/vuejs/vetur), have merged some long pending PRs, see the difference in [this diff](https://github.com/vuejs/vetur/compare/master...hikerpig:master) or [Changelog](https://github.com/hikerpig/vetur/blob/master/CHANGELOG.md) .**
 
 Vue tooling for VS Code.
 
@@ -55,4 +55,4 @@ See [CONTRIBUTING.md](https://github.com/vuejs/vetur/blob/master/.github/CONTRIB
 
 ## License
 
-MIT © [Pine Wu](https://github.com/octref) 
+MIT © [Pine Wu](https://github.com/octref)

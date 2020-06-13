@@ -1,9 +1,12 @@
 # Changelog
 
-### 0.24.1
+### 0.24.1 | [VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/hikerpig/vsextensions/vetur/0.24.1/vspackage)
 
-- 🙌 Fix template interpolation hover info of v-for readonly array item. Thanks to contribution from [@yoyo930021](https://github.com/yoyo930021). #1788.
-- 🙌 Improve performance while using template interpolation service. Thanks to contribution from [@IWANABETHATGUY](https://github.com/IWANABETHATGUY). #1839.
+- Based on [vuejs/vetur](https://github.com/vuejs/vetur) 0.24.1
+- 🙌 Add support analyzing vue-class-component and vue-property-decorator. Thanks to [@yoyo930021](https://github.com/yoyo930021). vuejs/vetur#1788
+  - Can't support self vue component props completion when `@Component({ props: { } })`
+- ✨ Follow user's config while resolving autoImport path, related vuejs/vetur#1177 vuejs/vetur#1905
+- ✨ find correct child components' definition inside template region, vuejs/vetur#1712
 
 ### 0.24.0 | 2020-03-04 | [VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/octref/vsextensions/vetur/0.24.0/vspackage)
 
@@ -428,11 +431,11 @@ Read updated doc at: https://vuejs.github.io/vetur/formatting.html#formatters.
 - Always ignore `end_with_newline` option in js-beautify so the template formats properly. #544.
 
 
-### 0.11.3 | 2017-11-13 
+### 0.11.3 | 2017-11-13
 
 - Hot fix for a bug in formatting `<template>` with js-beautify where it adds `</template>` to the end. #539.
 
-### 0.11.2 | 2017-11-13 
+### 0.11.2 | 2017-11-13
 
 - Workaround a js-beautify bug which indents multi-line comment. #535.
 - Docs for generating grammar for custom blocks: https://vuejs.github.io/vetur/highlighting.html.
@@ -440,7 +443,7 @@ Read updated doc at: https://vuejs.github.io/vetur/formatting.html#formatters.
 - Disallow longer version of `lang` in custom block setting (`js` over `javascript`, `md` over `markdown`).
 - Pretty print generated gramamr so it's readable. (You can find it at `~/.vscode/extensions/octref.vetur-<version>./syntaxes/vue-generated.json`).
 
-### 0.11.1 | 2017-11-10 
+### 0.11.1 | 2017-11-10
 
 - Syntax highlighting for Custom Block. #210.
   - Added setting `vetur.grammar.customBlocks`.
